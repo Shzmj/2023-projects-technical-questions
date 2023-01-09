@@ -64,7 +64,7 @@ app.listen(port, () => {
 
 // helper function which will take an input entity and checks if it matches the 
 // the spaceEntity type.
-function validEntity(entity: any) {
+function validEntity(entity: any): boolean {
     if (entity.type === 'space_cowboy') {
         if (typeof entity.metadata.name === 'string' && typeof entity.metadata.lassoLength === 'number') {
             if (typeof entity.location.x !== 'number' || typeof entity.location.y !== 'number') {
@@ -89,7 +89,7 @@ function validEntity(entity: any) {
 }
 
 // helper function which checks if the animal is lassoable 
-function lassoable(cowboy: spaceEntity, animal: spaceEntity) {
+function lassoable(cowboy: spaceEntity, animal: spaceEntity): boolean {
     // using distance formula to find the distance between the two entities
     let distance = Math.sqrt((animal.location.x - cowboy.location.x) ^ 2 + (animal.location.y - cowboy.location.y) ^ 2);
     let cowboyMeta = cowboy.metadata as spaceCowboy;
