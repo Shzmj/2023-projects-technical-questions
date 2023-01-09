@@ -39,12 +39,24 @@ app.post('/entity', (req, res) => {
 
 // lasooable returns all the space animals a space cowboy can lasso given their name
 app.get('/locallassoable', (req, res) => {
-    // TODO: fill me in
+    const cowboy_name = req.query.cowboy_name;
+    // getting the cowboy object from dB
+    const [cowboy_obj] = spaceDatabase.filter(entity => entity.type === 'space_cowboy' && entity.metadata.name === cowboy_name);
+
+    if (cowboy_obj === undefined) {
+        return res.status(400).send('Invalid cowboy name!');
+    }
+    const animals_arr = spaceDatabase.filter(entity => entity.type === 'space_animal' && lassoable(cowboy_obj, entity));
+    return res.status(200).send({ "space_animals": animals_arr });
 })
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// HELPER FUNCTIONS BELOW:
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // helper function which will take an input entity and checks if it matches the 
 // the spaceEntity type.
@@ -70,4 +82,13 @@ function validEntity(entity: any) {
         return false;
     }
     return true;
+}
+
+// helper function which checks if the animal is lassoable 
+function lassoable(cowboy: spaceEntity, animal: spaceEntity) {
+    // using distance formula to find the distance between the two entities
+    let distance = Math.sqrt((animal.location.x - cowboy.location.x) ^ 2 + (animal.location.y - cowboy.location.y) ^ 2);
+    let cowboyMeta = cowboy.metadata as spaceCowboy;
+    // checking if animal within length of lasso
+    return (distance <= cowboyMeta.lassoLength) ? true : false;
 }
