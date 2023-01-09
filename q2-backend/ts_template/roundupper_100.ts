@@ -18,15 +18,54 @@ type spaceEntity =
 // === ExpressJS setup + Server setup ===
 const spaceDatabase = [] as spaceEntity[];
 const app = express();
+const port = 8080;
 
 // the POST /entity endpoint adds an entity to your global space database
 app.post('/entity', (req, res) => {
-    // TODO: fill me in
+    try {
+        const { entities } = req.body;
+        for (const entity of entities) {
+            if (!validEntity(entity)) {
+                return res.sendStatus(400);
+            }
+        }
+        return res.sendStatus(200);
+    } catch (err) {
+        return res.sendStatus(400);
+    }
 });
 
 // lasooable returns all the space animals a space cowboy can lasso given their name
-app.get('/lassoable', (req, res) => {
+app.get('/locallassoable', (req, res) => {
     // TODO: fill me in
 })
 
-app.listen(8080);
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+});
+
+// helper function which will take an input entity and checks if it matches the 
+// the spaceEntity type.
+function validEntity(entity: any) {
+    if (entity.type === 'space_cowboy') {
+        if (typeof entity.metadata.name === 'string' && typeof entity.metadata.lassoLength === 'number') {
+            if (typeof entity.location.x !== 'number' || typeof entity.location.y !== 'number') {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else if (entity.type === 'space_animal') {
+        // checks if the type of space_animal is either a pig, cow or flying burger
+        if (["pig", "cow", "flying_burger"].includes(entity.metadata.type as string)) {
+            if (typeof entity.location.x !== 'number' || typeof entity.location.y !== 'number') {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    return true;
+}
