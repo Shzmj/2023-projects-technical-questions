@@ -56,7 +56,7 @@ export default function Table() {
       <AlertModal useContents={useContents} />
       <div className={styles.myTable}>
         <div className={styles.row}>
-          {contents.columnTitles.map((item, pos) => <div key={pos} className={styles.item} key={item}>{item}</div>)}
+          {contents.columnTitles.map((item, pos) => <div className={styles.item} key={item}>{item}</div>)}
         </div>
         {contents.rowContents.map((content, pos) => (
           <div data-testid='row' key={pos} className={styles.row}>
