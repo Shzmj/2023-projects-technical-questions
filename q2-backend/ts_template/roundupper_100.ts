@@ -25,6 +25,7 @@ app.post('/entity', (req, res) => {
     try {
         const { entities } = req.body;
         for (const entity of entities) {
+            // checking if the entities passed in are valid
             if (!validEntity(entity)) {
                 return res.sendStatus(400);
             }
