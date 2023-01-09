@@ -41,12 +41,15 @@ app.post('/entity', (req, res) => {
 app.get('/locallassoable', (req, res) => {
     const cowboy_name = req.query.cowboy_name;
     // getting the cowboy object from dB
-    const [cowboy_obj] = spaceDatabase.filter(entity => entity.type === 'space_cowboy' && entity.metadata.name === cowboy_name);
+    const [cowboy_obj] = spaceDatabase.filter(entity => entity.type === 'space_cowboy' && entity.metadata.name === cowboy_name) as { type: "space_cowboy", metadata: spaceCowboy, location: location }[];
 
+    // making sure that the name passed in corresponds to a cowboy
     if (cowboy_obj === undefined) {
         return res.status(400).send('Invalid cowboy name!');
     }
-    const animals_arr = spaceDatabase.filter(entity => entity.type === 'space_animal' && lassoable(cowboy_obj, entity));
+
+    // collecting all the space animals that are lassoable
+    const animals_arr = spaceDatabase.filter(entity => entity.type === 'space_animal' && lassoable(cowboy_obj, entity)) as { type: "space_animal", metadata: spaceAnimal, location: location }[];
     return res.status(200).send({ "space_animals": animals_arr });
 })
 
