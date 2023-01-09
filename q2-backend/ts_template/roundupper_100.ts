@@ -28,6 +28,8 @@ app.post('/entity', (req, res) => {
             if (!validEntity(entity)) {
                 return res.sendStatus(400);
             }
+            // entity is valid so can push to dB.
+            spaceDatabase.push(entity);
         }
         return res.sendStatus(200);
     } catch (err) {
