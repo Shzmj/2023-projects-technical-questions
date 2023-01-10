@@ -51,7 +51,7 @@ app.get('/locallassoable', (req, res) => {
 
     // collecting all the space animals that are lassoable
     const animals_arr = spaceDatabase.filter(entity => entity.type === 'space_animal' && lassoable(cowboy_obj, entity)) as { type: "space_animal", metadata: spaceAnimal, location: location }[];
-    return res.status(200).send({ "space_animals": animals_arr });
+    return res.status(200).json({ "space_animals": animals_arr });
 })
 
 app.listen(port, () => {
