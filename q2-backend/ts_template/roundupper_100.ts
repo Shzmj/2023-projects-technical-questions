@@ -20,6 +20,9 @@ const spaceDatabase = [] as spaceEntity[];
 const app = express();
 const port = 8080;
 
+// middleware to parse incoming JSON requests
+app.use(express.json());
+
 // the POST /entity endpoint adds an entity to your global space database
 app.post('/entity', (req, res) => {
     try {
