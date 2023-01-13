@@ -94,7 +94,9 @@ function validEntity(entity: any): boolean {
 function lassoable(cowboy: spaceEntity, animal: spaceEntity): boolean {
     // using distance formula to find the distance between the two entities
     let distance = Math.sqrt((animal.location.x - cowboy.location.x) ** 2 + (animal.location.y - cowboy.location.y) ** 2);
+
     let cowboyMeta = cowboy.metadata as spaceCowboy;
+    console.log("len " + cowboyMeta.lassoLength);
     // checking if animal within length of lasso
-    return (distance <= cowboyMeta.lassoLength);
+    return (distance <= cowboyMeta.lassoLength ? true : false);
 }
