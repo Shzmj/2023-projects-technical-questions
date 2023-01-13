@@ -1,17 +1,16 @@
-import express from 'express';
+import express from "express";
 
 // location is the simple (x, y) coordinates of an entity within the system
 // spaceCowboy models a cowboy in our super amazing system
 // spaceAnimal models a single animal in our amazing system
-type location = { x: number, y: number };
-type spaceCowboy = { name: string, lassoLength: number };
+type location = { x: number; y: number };
+type spaceCowboy = { name: string; lassoLength: number };
 type spaceAnimal = { type: "pig" | "cow" | "flying_burger" };
 
 // spaceEntity models an entity in the super amazing (ROUND UPPER 100) system
 type spaceEntity =
-    | { type: "space_cowboy", metadata: spaceCowboy, location: location }
-    | { type: "space_animal", metadata: spaceAnimal, location: location };
-
+    | { type: "space_cowboy"; metadata: spaceCowboy; location: location }
+    | { type: "space_animal"; metadata: spaceAnimal; location: location };
 
 // === ADD YOUR CODE BELOW :D ===
 
@@ -24,7 +23,7 @@ const port = 8080;
 app.use(express.json());
 
 // the POST /entity endpoint adds an entity to your global space database
-app.post('/entity', (req, res) => {
+app.post("/entity", (req, res) => {
     try {
         const { entities } = req.body;
         for (const entity of entities) {
@@ -42,7 +41,7 @@ app.post('/entity', (req, res) => {
 });
 
 // lasooable returns all the space animals a space cowboy can lasso given their name
-app.get('/locallassoable', (req, res) => {
+app.get("/lassoable", (req, res) => {
     const cowboy_name = req.query.cowboy_name;
     // getting the cowboy object from dB
     const [cowboy_obj] = spaceDatabase.filter(entity => entity.type === 'space_cowboy' && entity.metadata.name === cowboy_name) as { type: "space_cowboy", metadata: spaceCowboy, location: location }[];
