@@ -14,6 +14,9 @@ type spaceEntity =
 
 // === ADD YOUR CODE BELOW :D ===
 
+type animalArr = { type: "space_animal"; metadata: spaceAnimal; location: location }[];
+type returnAnimal = { type: String; location: location };
+
 // === ExpressJS setup + Server setup ===
 const spaceDatabase = [] as spaceEntity[];
 const app = express();
@@ -40,7 +43,7 @@ app.post("/entity", (req, res) => {
     }
 });
 
-// lasooable returns all the space animals a space cowboy can lasso given their name
+// /lassoable returns all the space animals a space cowboy can lasso given their name
 app.get("/lassoable", (req, res) => {
     const cowboy_name = req.query.cowboy_name;
     // getting the cowboy object from dB
@@ -52,8 +55,16 @@ app.get("/lassoable", (req, res) => {
     }
 
     // collecting all the space animals that are lassoable
-    const animals_arr = spaceDatabase.filter(entity => entity.type === 'space_animal' && lassoable(cowboy_obj, entity)) as { type: "space_animal", metadata: spaceAnimal, location: location }[];
-    return res.status(200).json({ "space_animals": animals_arr });
+    let animals_arr = spaceDatabase.filter(entity => entity.type === 'space_animal' && lassoable(cowboy_obj, entity)) as animalArr;
+
+    const nearbyAnimals = [] as returnAnimal[];
+
+    // going through each animal in animals_arr and pushing the returnAnimal object into nearbyAnimals.
+    for (const animal of animals_arr) {
+        nearbyAnimals.push({ type: animal.metadata.type, location: animal.location })
+    }
+
+    return res.status(200).json({ "space_animals": nearbyAnimals });
 })
 
 app.listen(port, () => {
@@ -96,7 +107,6 @@ function lassoable(cowboy: spaceEntity, animal: spaceEntity): boolean {
     let distance = Math.sqrt((animal.location.x - cowboy.location.x) ** 2 + (animal.location.y - cowboy.location.y) ** 2);
 
     let cowboyMeta = cowboy.metadata as spaceCowboy;
-    console.log("len " + cowboyMeta.lassoLength);
     // checking if animal within length of lasso
     return (distance <= cowboyMeta.lassoLength ? true : false);
 }
