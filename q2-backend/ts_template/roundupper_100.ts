@@ -14,8 +14,14 @@ type spaceEntity =
 
 // === ADD YOUR CODE BELOW :D ===
 
-type animalArr = { type: "space_animal"; metadata: spaceAnimal; location: location }[];
-type returnAnimal = { type: String; location: location };
+// spaceAnimalEntity models a space_animal entity object.
+type spaceAnimalEntity = { type: "space_animal"; metadata: spaceAnimal; location: location };
+
+// spaceCowboyEntity models a space_cowboy entity object.
+type spaceCowboyEntity = { type: "space_cowboy"; metadata: spaceCowboy; location: location };
+
+// returnAnimal models a space_animal entity however only containing the metadata.type and location.
+type returnAnimal = { type: spaceAnimal; location: location };
 
 // === ExpressJS setup + Server setup ===
 const spaceDatabase = [] as spaceEntity[];
@@ -47,7 +53,7 @@ app.post("/entity", (req, res) => {
 app.get("/lassoable", (req, res) => {
     const cowboy_name = req.query.cowboy_name;
     // getting the cowboy object from dB
-    const [cowboy_obj] = spaceDatabase.filter(entity => entity.type === 'space_cowboy' && entity.metadata.name === cowboy_name) as { type: "space_cowboy", metadata: spaceCowboy, location: location }[];
+    const [cowboy_obj] = spaceDatabase.filter(entity => entity.type === 'space_cowboy' && entity.metadata.name === cowboy_name) as spaceCowboyEntity[];
 
     // making sure that the name passed in corresponds to a cowboy
     if (cowboy_obj === undefined) {
@@ -55,7 +61,7 @@ app.get("/lassoable", (req, res) => {
     }
 
     // collecting all the space animals that are lassoable
-    let animals_arr = spaceDatabase.filter(entity => entity.type === 'space_animal' && lassoable(cowboy_obj, entity)) as animalArr;
+    let animals_arr = spaceDatabase.filter(entity => entity.type === 'space_animal' && lassoable(cowboy_obj, entity)) as spaceAnimalEntity[];
 
     const nearbyAnimals = [] as returnAnimal[];
 
