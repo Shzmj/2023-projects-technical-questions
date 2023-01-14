@@ -21,7 +21,7 @@ type spaceAnimalEntity = { type: "space_animal"; metadata: spaceAnimal; location
 type spaceCowboyEntity = { type: "space_cowboy"; metadata: spaceCowboy; location: location };
 
 // returnAnimal models a space_animal entity however only containing the metadata.type and location.
-type returnAnimal = { type: spaceAnimal; location: location };
+type returnAnimal = { type: string; location: location };
 
 // === ExpressJS setup + Server setup ===
 const spaceDatabase = [] as spaceEntity[];
